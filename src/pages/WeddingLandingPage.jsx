@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export default function WeddingLandingPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-[#f9f6f2] text-[#4f4a45] font-sans">
       {/* Hero */}
@@ -23,7 +27,10 @@ export default function WeddingLandingPage() {
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <button className="rounded-full bg-[#b89d87] hover:bg-[#a88d77] transition-colors px-8 py-4 text-white shadow-md text-base">
+            <button
+              className="rounded-full bg-[#b89d87] hover:bg-[#a88d77] transition-colors px-8 py-4 text-white shadow-md text-base"
+              onClick={() => navigate("/confirmacion")}
+            >
               Confirmar asistencia
             </button>
 
@@ -180,7 +187,10 @@ export default function WeddingLandingPage() {
             necesidades especiales y consultar toda la información del evento.
           </p>
 
-          <button className="rounded-full bg-white text-[#6f5b4b] px-8 py-4 text-base font-medium hover:scale-[1.02] transition-transform shadow-md">
+          <button
+            className="rounded-full bg-white text-[#6f5b4b] px-8 py-4 text-base font-medium hover:scale-[1.02] transition-transform shadow-md"
+            onClick={() => navigate("/confirmacion")}
+          >
             Confirmar asistencia
           </button>
         </div>
