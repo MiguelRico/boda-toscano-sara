@@ -1,4 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+
+import { useSearchParams } from "react-router-dom";
 
 const MAX_GUESTS = 10;
 
@@ -30,26 +32,26 @@ const toggleAllergy = (id, allergy) => {
   );
 };
 
-/**
- * TODO:
- * Implementar posteriormente con Google Apps Script
- */
-const findGroup = async ({ email, phone }) => {
-  console.log("findGroup()", { email, phone });
+const findGroup = async ({ email }) => {
+  console.log("findGroup()", { email });
 
-  /**
-   * Ejemplo respuesta futura:
-   *
-   * return {
-   *   found: true,
-   *   groupId: 'GRP-123',
-   *   guests: [...]
-   * };
-   */
+  const response = await fetch(
+    `${import.meta.env.VITE_RSVP_API_URL}?email=${email}`,
+  );
 
-  return {
-    found: false,
-  };
+  const responseBody = await response.json();
+
+  console.log("Response()", { responseBody });
+
+  return JSON.stringify(responseBody);
+};
+
+const findGroupById = async (groupId) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_RSVP_API_URL}?groupId=${groupId}`,
+  );
+
+  return await response.json();
 };
 
 const saveGroup = async (payload) => {
@@ -85,6 +87,9 @@ const isValidPhone = (value) => {
 };
 
 export default function ConfirmationPage() {
+  const [searchParams] = useSearchParams();
+  const groupIdFromUrl = searchParams.get("groupId");
+
   const [mode, setMode] = useState(null);
 
   const [groupId, setGroupId] = useState(null);
@@ -105,6 +110,40 @@ export default function ConfirmationPage() {
   const [errors, setErrors] = useState({});
 
   const totalGuests = useMemo(() => guests.length, [guests]);
+  useEffect(() => {
+    const loadGroup = async () => {
+      if (!groupIdFromUrl) {
+        return;
+      }
+
+      try {
+        setLoadingSearch(true);
+
+        const response = await findGroupById(groupIdFromUrl);
+
+        if (!response.found) {
+          setGlobalError("No se encontró la invitación.");
+
+          return;
+        }
+
+        setGroupId(response.email);
+        handleContactChange("email", response.email);
+        handleContactChange("phone", response.phone);
+        setGuests(response.guests);
+
+        setMode("form");
+      } catch (error) {
+        console.error(error);
+
+        setGlobalError("Error cargando invitación.");
+      } finally {
+        setLoadingSearch(false);
+      }
+    };
+
+    loadGroup();
+  }, [groupIdFromUrl]);
 
   const handleContactChange = (field, value) => {
     setContact((prev) => ({
@@ -201,12 +240,6 @@ export default function ConfirmationPage() {
       validationErrors.email = "Introduce un email válido";
     }
 
-    if (!contact.phone.trim()) {
-      validationErrors.phone = "El teléfono es obligatorio";
-    } else if (!isValidPhone(contact.phone)) {
-      validationErrors.phone = "Introduce un teléfono válido";
-    }
-
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
@@ -216,21 +249,23 @@ export default function ConfirmationPage() {
     try {
       setLoadingSearch(true);
 
-      const response = await findGroup({
+      const jsonString = await findGroup({
         email: contact.email,
-        phone: contact.phone,
       });
+
+      const response = JSON.parse(jsonString);
 
       if (!response.found) {
         setGlobalError(
-          "No hemos encontrado una invitación asociada a esos datos.",
+          "No hemos encontrado una invitación asociada a este email.",
         );
 
         return;
       }
 
-      setGroupId(response.groupId);
-
+      setGroupId(response.email);
+      handleContactChange("email", response.email);
+      handleContactChange("phone", response.phone);
       setGuests(response.guests);
 
       setMode("form");
@@ -268,12 +303,17 @@ export default function ConfirmationPage() {
       setLoadingSubmit(true);
 
       const payload = {
+        groupId: contact.email,
         email: contact.email,
         phone: contact.phone,
         guests,
       };
 
-      await saveGroup(payload);
+      const response = await saveGroup(payload);
+
+      if (response.email) {
+        setGroupId(response.email);
+      }
 
       setSuccessMessage(
         "¡Gracias! Hemos guardado vuestra confirmación correctamente.",
@@ -314,8 +354,8 @@ export default function ConfirmationPage() {
               </h2>
 
               <p className="text-sm text-[#7a6d63]">
-                Introduce el email y teléfono asociados a tu invitación para
-                modificarla o revisarla.
+                Introduce el email asociado a tu invitación para modificarla o
+                revisarla.
               </p>
             </div>
 
@@ -334,24 +374,6 @@ export default function ConfirmationPage() {
 
               {errors.email && (
                 <p className="mt-2 text-sm text-red-500">{errors.email}</p>
-              )}
-            </div>
-
-            <div className="mb-8">
-              <label className="mb-2 block text-sm text-[#4d4036]">
-                Teléfono de contacto
-              </label>
-
-              <input
-                type="tel"
-                value={contact.phone}
-                onChange={(e) => handleContactChange("phone", e.target.value)}
-                className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
-                placeholder="+34 600 000 000"
-              />
-
-              {errors.phone && (
-                <p className="mt-2 text-sm text-red-500">{errors.phone}</p>
               )}
             </div>
 
@@ -617,7 +639,7 @@ export default function ConfirmationPage() {
                           }
                           className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-700 outline-none focus:border-blue-300"
                         >
-                          <option value="">No necesito autobus de ida</option>
+                          <option value="No">No necesito autobus de ida</option>
                           <option value="18:00">18:00</option>
                         </select>
                       </div>
@@ -628,7 +650,7 @@ export default function ConfirmationPage() {
                         </label>
 
                         <select
-                          value={guest.busReturn}
+                          value={guest.returnBus}
                           onChange={(e) =>
                             handleGuestChange(
                               index,
@@ -638,11 +660,11 @@ export default function ConfirmationPage() {
                           }
                           className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-700 outline-none focus:border-blue-300"
                         >
-                          <option value="">
+                          <option value="No">
                             No necesito autobus de vuelta
                           </option>
-                          <option value="03:00">03:00</option>
-                          <option value="06:00">06:00</option>
+                          <option value="3:00">3:00</option>
+                          <option value="6:00">6:00</option>
                         </select>
                       </div>
                     </div>

@@ -29,7 +29,7 @@ export default function WeddingLandingPage() {
           <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
             <button
               className="rounded-full bg-[#b89d87] hover:bg-[#a88d77] transition-colors px-8 py-4 text-white shadow-md text-base"
-              onClick={() => navigate("/confirmacion")}
+              onClick={() => navigate("/rsvp")}
             >
               Confirmar asistencia
             </button>
@@ -189,7 +189,7 @@ export default function WeddingLandingPage() {
 
           <button
             className="rounded-full bg-white text-[#6f5b4b] px-8 py-4 text-base font-medium hover:scale-[1.02] transition-transform shadow-md"
-            onClick={() => navigate("/confirmacion")}
+            onClick={() => navigate("/rsvp")}
           >
             Confirmar asistencia
           </button>

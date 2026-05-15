@@ -15,7 +15,7 @@ export const router = createBrowserRouter([
         element: <WeddingLandingPage />,
       },
       {
-        path: "/confirmacion",
+        path: "/rsvp",
         element: <ConfirmationPage />,
       },
     ],
