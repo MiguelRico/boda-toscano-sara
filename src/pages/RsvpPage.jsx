@@ -367,7 +367,7 @@ export default function ConfirmationPage() {
       <div className="mx-auto max-w-3xl">
         <div className="mb-10 text-center">
           <p className="mb-2 text-sm uppercase tracking-[0.3em] text-[#b8a999]">
-            Toscano & Sara
+            Sara & Toscano
           </p>
 
           <h1 className="mb-4 text-4xl font-light text-[#4d4036]">
