@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-
+import StatusPopup from "../components/common/StatusPopup";
 import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const MAX_GUESTS = 10;
 
@@ -91,6 +92,7 @@ export default function ConfirmationPage() {
   const groupIdFromUrl = searchParams.get("groupId");
 
   const [mode, setMode] = useState(null);
+  const [isEdition, setIsEdition] = useState(false);
 
   const [groupId, setGroupId] = useState(null);
 
@@ -103,11 +105,14 @@ export default function ConfirmationPage() {
 
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-
-  const [successMessage, setSuccessMessage] = useState("");
-  const [globalError, setGlobalError] = useState("");
-
   const [errors, setErrors] = useState({});
+
+  const [popup, setPopup] = useState({
+    open: false,
+    type: "success",
+    title: "",
+    message: "",
+  });
 
   const totalGuests = useMemo(() => guests.length, [guests]);
   useEffect(() => {
@@ -122,7 +127,12 @@ export default function ConfirmationPage() {
         const response = await findGroupById(groupIdFromUrl);
 
         if (!response.found) {
-          setGlobalError("No se encontró la invitación.");
+          setPopup({
+            open: true,
+            type: "error",
+            title: "Ha ocurrido un problema",
+            message: "No se encontró la invitación.",
+          });
 
           return;
         }
@@ -133,10 +143,15 @@ export default function ConfirmationPage() {
         setGuests(response.guests);
 
         setMode("form");
+        setIsEdition(true);
       } catch (error) {
         console.error(error);
-
-        setGlobalError("Error cargando invitación.");
+        setPopup({
+          open: true,
+          type: "error",
+          title: "Ha ocurrido un problema",
+          message: "Error cargando invitación.",
+        });
       } finally {
         setLoadingSearch(false);
       }
@@ -227,11 +242,9 @@ export default function ConfirmationPage() {
 
     return Object.keys(newErrors).length === 0;
   };
+  const navigate = useNavigate();
 
   const handleSearchInvitation = async () => {
-    setSuccessMessage("");
-    setGlobalError("");
-
     const validationErrors = {};
 
     if (!contact.email.trim()) {
@@ -256,9 +269,12 @@ export default function ConfirmationPage() {
       const response = JSON.parse(jsonString);
 
       if (!response.found) {
-        setGlobalError(
-          "No hemos encontrado una invitación asociada a este email.",
-        );
+        setPopup({
+          open: true,
+          type: "error",
+          title: "Ha ocurrido un problema",
+          message: "No hemos encontrado una invitación asociada a este email.",
+        });
 
         return;
       }
@@ -269,12 +285,16 @@ export default function ConfirmationPage() {
       setGuests(response.guests);
 
       setMode("form");
-
-      setSuccessMessage("Invitación encontrada correctamente.");
+      setIsEdition(true);
     } catch (error) {
       console.error(error);
-
-      setGlobalError("Ha ocurrido un error buscando tu invitación.");
+      setPopup({
+        open: true,
+        type: "error",
+        title: "Ha ocurrido un problema",
+        message:
+          "Ha ocurrido un error buscando tu invitación. Por favor, inténtalo de nuevo en unos minutos.",
+      });
     } finally {
       setLoadingSearch(false);
     }
@@ -283,15 +303,11 @@ export default function ConfirmationPage() {
   const handleCreateNew = () => {
     setMode("form");
     setGroupId(null);
-    setSuccessMessage("");
-    setGlobalError("");
+    setIsEdition(false);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    setSuccessMessage("");
-    setGlobalError("");
 
     const isValid = validateForm();
 
@@ -315,13 +331,32 @@ export default function ConfirmationPage() {
         setGroupId(response.email);
       }
 
-      setSuccessMessage(
-        "¡Gracias! Hemos guardado vuestra confirmación correctamente.",
-      );
+      if (isEdition) {
+        setPopup({
+          open: true,
+          type: "success",
+          title: "¡Confirmación recibida!",
+          message:
+            "Hemos actualizado correctamente vuestra asistencia. También recibiréis un email con el enlace para editar vuestra invitación cuando lo necesitéis.",
+        });
+      } else {
+        setPopup({
+          open: true,
+          type: "success",
+          title: "¡Confirmación recibida!",
+          message:
+            "Hemos guardado correctamente vuestra asistencia. También recibiréis un email con el enlace para editar vuestra invitación cuando lo necesitéis.",
+        });
+      }
     } catch (error) {
       console.error(error);
-
-      setGlobalError("Ha ocurrido un error guardando la información.");
+      setPopup({
+        open: true,
+        type: "error",
+        title: "Ha ocurrido un problema",
+        message:
+          "No hemos podido guardar vuestra información. Por favor, intentadlo de nuevo en unos minutos.",
+      });
     } finally {
       setLoadingSubmit(false);
     }
@@ -332,7 +367,7 @@ export default function ConfirmationPage() {
       <div className="mx-auto max-w-3xl">
         <div className="mb-10 text-center">
           <p className="mb-2 text-sm uppercase tracking-[0.3em] text-[#b8a999]">
-            Sara & Toscano
+            Toscano & Sara
           </p>
 
           <h1 className="mb-4 text-4xl font-light text-[#4d4036]">
@@ -696,19 +731,20 @@ export default function ConfirmationPage() {
             </div>
           </form>
         )}
-
-        {successMessage && (
-          <div className="mt-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-green-700">
-            {successMessage}
-          </div>
-        )}
-
-        {globalError && (
-          <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-red-700">
-            {globalError}
-          </div>
-        )}
       </div>
+
+      <StatusPopup
+        open={popup.open}
+        type={popup.type}
+        title={popup.title}
+        message={popup.message}
+        onClose={() =>
+          setPopup((prev) => ({
+            ...prev,
+            open: false,
+          }))
+        }
+      />
     </div>
   );
 }
