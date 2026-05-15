@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import HomePage from "../pages/HomePage";
-import ConfirmationPage from "../pages/ConfirmationPage";
+import ConfirmationPage from "../pages/RsvpPage";
 import MainLayout from "../components/layout/MainLayout";
 import WeddingLandingPage from "../pages/WeddingLandingPage";
 

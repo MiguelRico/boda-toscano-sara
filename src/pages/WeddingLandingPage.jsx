@@ -15,7 +15,7 @@ export default function WeddingLandingPage() {
           </p>
 
           <h1 className="text-5xl md:text-7xl font-light leading-tight text-[#6f5b4b]">
-            Sara <span className="mx-2">&</span> Toscano
+            Toscano <span className="mx-2">&</span> Sara
           </h1>
 
           <div className="w-24 h-[1px] bg-[#cdb8a3] my-8" />

@@ -84,7 +84,7 @@ const isValidEmail = (value) => {
 };
 
 const isValidPhone = (value) => {
-  return /^[+]?[\d\s()-]{8,20}$/.test(value);
+  return /^(?=(?:.*\d){9}$)[67][\d\s()-]{8}$/.test(value);
 };
 
 export default function ConfirmationPage() {
@@ -473,7 +473,7 @@ export default function ConfirmationPage() {
                       handleContactChange("phone", e.target.value)
                     }
                     className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
-                    placeholder="Ej: +34 600 000 000"
+                    placeholder="Ej: 600123456"
                   />
 
                   {errors.phone && (
