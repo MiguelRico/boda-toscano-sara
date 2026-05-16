@@ -90,6 +90,7 @@ const isValidPhone = (value) => {
 export default function ConfirmationPage() {
   const [searchParams] = useSearchParams();
   const groupIdFromUrl = searchParams.get("groupId");
+  const hasGroupId = Boolean(groupIdFromUrl);
 
   const [mode, setMode] = useState(null);
   const [isEdition, setIsEdition] = useState(false);
@@ -278,14 +279,13 @@ export default function ConfirmationPage() {
 
         return;
       }
-
       setGroupId(response.email);
       handleContactChange("email", response.email);
       handleContactChange("phone", response.phone);
       setGuests(response.guests);
-
       setMode("form");
       setIsEdition(true);
+      window.history.replaceState(null, "", "/rsvp?groupId=" + response.email);
     } catch (error) {
       console.error(error);
       setPopup({
@@ -362,6 +362,54 @@ export default function ConfirmationPage() {
     }
   };
 
+  if (loadingSearch || loadingSubmit) {
+    if (loadingSearch) {
+      return (
+        <div
+          className="
+        flex min-h-screen items-center
+        justify-center bg-[#f9f6f2]
+      "
+        >
+          <div className="text-center">
+            <div
+              className="
+            mx-auto mb-4 h-12 w-12
+            animate-spin rounded-full
+            border-4 border-[#d8cec3]
+            border-t-[#4d4036]
+          "
+            />
+
+            <p className="text-[#6f6257]">Cargando invitación...</p>
+          </div>
+        </div>
+      );
+    } else if (loadingSubmit) {
+      return (
+        <div
+          className="
+        flex min-h-screen items-center
+        justify-center bg-[#f9f6f2]
+      "
+        >
+          <div className="text-center">
+            <div
+              className="
+            mx-auto mb-4 h-12 w-12
+            animate-spin rounded-full
+            border-4 border-[#d8cec3]
+            border-t-[#4d4036]
+          "
+            />
+
+            <p className="text-[#6f6257]">Enviando confirmación...</p>
+          </div>
+        </div>
+      );
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#f9f6f2] px-4 py-10">
       <div className="mx-auto max-w-3xl">
@@ -381,7 +429,7 @@ export default function ConfirmationPage() {
           </p>
         </div>
 
-        {!mode && (
+        {!mode && !hasGroupId && (
           <div className="rounded-3xl bg-white p-6 shadow-sm">
             <div className="mb-8">
               <h2 className="mb-2 text-2xl font-light text-[#4d4036]">
@@ -496,11 +544,11 @@ export default function ConfirmationPage() {
                     </h3>
                   </div>
 
-                  {guests.length > 1 && (
+                  {guests.length > 0 && (
                     <button
                       type="button"
                       onClick={() => handleRemoveGuest(index)}
-                      className="text-sm text-red-500 transition hover:opacity-70"
+                      className="rounded-full bg-[#cd5c5c] hover:bg-[#f08080] transition-colors px-8 py-4 text-white shadow-md text-base transition hover:opacity-70"
                     >
                       Eliminar
                     </button>
@@ -567,8 +615,8 @@ export default function ConfirmationPage() {
                           key={allergy}
                           className={`flex cursor-pointer items-center gap-2 rounded-2xl border px-4 py-3 text-sm transition ${
                             checked
-                              ? "border-blue-300 bg-blue-50 text-blue-600"
-                              : "border-stone-200 bg-stone-50 text-stone-600 hover:border-blue-200"
+                              ? "border-[#e7ddd4] bg-[#b89d87] hover:bg-[#a88d77] text-white"
+                              : "border-[#e7ddd4]-stone-200 bg-[#fcfaf8]-stone-50 text-stone-600 hover:border-[#b89f87]"
                           }`}
                         >
                           <input
@@ -577,7 +625,7 @@ export default function ConfirmationPage() {
                             onChange={() =>
                               handleGuestChange(index, "allergies", allergy)
                             }
-                            className="h-4 w-4 rounded border-stone-300 text-blue-400 focus:ring-blue-300"
+                            className="h-4 w-4 rounded border border-[#e7ddd4] bg-white accent-white focus:ring-0"
                           />
 
                           {allergy}
@@ -598,7 +646,7 @@ export default function ConfirmationPage() {
                         )
                       }
                       placeholder="Otras alergias, intolerancias o comentarios alimentarios"
-                      className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-stone-800 outline-none transition focus:border-blue-300 focus:bg-white"
+                      className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-stone-800 outline-none transition focus:border-[#b89f87] focus:bg-white"
                     />
                   </div>
                 </div>
@@ -625,7 +673,7 @@ export default function ConfirmationPage() {
                   )}
                 </div>
 
-                <div className="mt-6 rounded-3xl bg-amber-50/70 p-5">
+                <div className="mt-6 rounded-3xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87] p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="text-lg font-semibold text-stone-800">
@@ -651,8 +699,7 @@ export default function ConfirmationPage() {
                         }
                         className="peer sr-only"
                       />
-
-                      <div className="peer h-6 w-11 rounded-full bg-stone-300 transition after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-400 peer-checked:after:translate-x-full" />
+                      <div className="peer h-6 w-11 rounded-full bg-stone-300 transition after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#a88d77] peer-checked:after:translate-x-full" />
                     </label>
                   </div>
 
@@ -672,7 +719,7 @@ export default function ConfirmationPage() {
                               e.target.value,
                             )
                           }
-                          className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-700 outline-none focus:border-blue-300"
+                          className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-700 outline-none focus:border-[#b89f87]"
                         >
                           <option value="No">No necesito autobus de ida</option>
                           <option value="18:00">18:00</option>
@@ -693,7 +740,7 @@ export default function ConfirmationPage() {
                               e.target.value,
                             )
                           }
-                          className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-700 outline-none focus:border-blue-300"
+                          className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-700 outline-none focus:border-[#b89f87]"
                         >
                           <option value="No">
                             No necesito autobus de vuelta

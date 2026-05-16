@@ -133,7 +133,7 @@ export default function StatusPopup({
                 transition hover:bg-white
                 "
               >
-                Reintentar
+                Volver
               </button>
             </div>
           </div>
