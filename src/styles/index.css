@@ -7,3 +7,7 @@ body,
   min-height: 100%;
   font-family: sans-serif;
 }
+
+html {
+  scroll-behavior: smooth;
+}

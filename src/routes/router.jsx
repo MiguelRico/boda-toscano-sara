@@ -2,7 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 
 import ConfirmationPage from "../pages/RsvpPage";
 import MainLayout from "../components/layout/MainLayout";
-import WeddingLandingPage from "../pages/WeddingLandingPage";
+import LandingPage from "../pages/LandingPage";
+import DetailsPage from "../pages/DetailsPage";
 
 export const router = createBrowserRouter([
   {
@@ -11,11 +12,15 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <WeddingLandingPage />,
+        element: <LandingPage />,
       },
       {
         path: "/rsvp",
         element: <ConfirmationPage />,
+      },
+      {
+        path: "/details",
+        element: <DetailsPage />,
       },
     ],
   },
