@@ -539,7 +539,7 @@ export default function ConfirmationPage() {
                   </div>
                 </div>
 
-                <RevealItem amount={0.1}>
+                <RevealItem amount={0.1} delay={0.2}>
                   {guests.map((guest, index) => (
                     <div
                       key={index}
@@ -619,8 +619,8 @@ export default function ConfirmationPage() {
                         </div>
                       </RevealItem>
 
-                      <RevealItem>
-                        <div className="mt-6">
+                      <div className="mt-6">
+                        <RevealItem amount={0.2}>
                           <label className="mb-3 block text-sm font-medium text-stone-700">
                             Intolerancias o alergias
                           </label>
@@ -656,7 +656,9 @@ export default function ConfirmationPage() {
                               );
                             })}
                           </div>
+                        </RevealItem>
 
+                        <RevealItem amount={0.2}>
                           <div className="mt-4">
                             <textarea
                               rows={3}
@@ -672,10 +674,10 @@ export default function ConfirmationPage() {
                               className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-stone-800 outline-none transition focus:border-[#b89f87] focus:bg-white"
                             />
                           </div>
-                        </div>
-                      </RevealItem>
+                        </RevealItem>
+                      </div>
 
-                      <RevealItem>
+                      <RevealItem amount={0.2}>
                         <div className="mt-5">
                           <label className="mb-2 block text-sm text-[#4d4036]">
                             Comentarios adicionales
@@ -703,7 +705,7 @@ export default function ConfirmationPage() {
                         </div>
                       </RevealItem>
 
-                      <RevealItem>
+                      <RevealItem amount={0.2}>
                         <div className="mt-6 rounded-3xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87] p-5">
                           <div className="flex items-start justify-between gap-4">
                             <div>

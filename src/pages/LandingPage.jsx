@@ -32,53 +32,55 @@ export default function WeddingLandingPage() {
                   nuestra historia con las personas que más queremos.
                 </p>
 
-                <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                  <button
-                    className="rounded-full bg-[#b89d87] hover:bg-[#a88d77] transition-colors px-8 py-4 text-white shadow-md text-base"
-                    onClick={() => navigate("/rsvp")}
-                  >
-                    Confirmar asistencia
-                  </button>
+                <RevealItem delay={1}>
+                  <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <button
+                      className="rounded-full bg-[#b89d87] hover:bg-[#a88d77] transition-colors px-8 py-4 text-white shadow-md text-base"
+                      onClick={() => navigate("/rsvp")}
+                    >
+                      Confirmar asistencia
+                    </button>
 
-                  <button
-                    className="rounded-full border border-[#cbb7a5] px-8 py-4 text-[#6f5b4b] bg-white/60 backdrop-blur-sm hover:bg-white transition-colors text-base"
-                    onClick={() => navigate("/details")}
-                  >
-                    Ver detalles del evento
-                  </button>
-                </div>
+                    <button
+                      className="rounded-full border border-[#cbb7a5] px-8 py-4 text-[#6f5b4b] bg-white/60 backdrop-blur-sm hover:bg-white transition-colors text-base"
+                      onClick={() => navigate("/details")}
+                    >
+                      Ver detalles del evento
+                    </button>
+                  </div>
+                </RevealItem>
               </div>
             </section>
-          </RevealItem>
 
-          {/* Main card */}
-          <RevealItem amount={0.1}>
-            <section className="px-6 -mt-8 relative z-20 pb-20">
-              <div className="max-w-5xl mx-auto bg-white rounded-[32px] shadow-xl p-6 md:p-10 border border-[#f0e7df]">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <InfoCard
-                    title="Transporte"
-                    subtitle="Paradas en Huelva y Corrales"
-                    description="Tendremos autobús para facilitar el desplazamiento de ida y vuelta."
-                    emoji="🚌"
-                  />
+            {/* Main card */}
+            <RevealItem amount={0} delay={0.8}>
+              <section className="px-6 -mt-8 relative z-20 pb-20">
+                <div className="max-w-5xl mx-auto bg-white rounded-[32px] shadow-xl p-6 md:p-10 border border-[#f0e7df]">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <InfoCard
+                      title="Transporte"
+                      subtitle="Paradas en Huelva y Corrales"
+                      description="Tendremos autobús para facilitar el desplazamiento de ida y vuelta."
+                      emoji="🚌"
+                    />
 
-                  <InfoCard
-                    title="Ceremonia"
-                    subtitle="18:00 · Aguas Del Pino"
-                    description="Una ceremonia al aire libre rodeados de naturaleza, música y una puesta de sol inolvidable."
-                    emoji="💍"
-                  />
+                    <InfoCard
+                      title="Ceremonia"
+                      subtitle="18:00 · Aguas Del Pino"
+                      description="Una ceremonia al aire libre rodeados de naturaleza, música y una puesta de sol inolvidable."
+                      emoji="💍"
+                    />
 
-                  <InfoCard
-                    title="Celebración"
-                    subtitle="Cóctel, cena y fiesta"
-                    description="Habrá barra libre, música en directo y muchas ganas de bailar hasta el amanecer."
-                    emoji="✨"
-                  />
+                    <InfoCard
+                      title="Celebración"
+                      subtitle="Cóctel, cena y fiesta"
+                      description="Habrá barra libre, música en directo y muchas ganas de bailar hasta el amanecer."
+                      emoji="✨"
+                    />
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            </RevealItem>
           </RevealItem>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PageTransition from "../components/common/PageTransition";
 import { RevealItem } from "../components/common/RevealItem";
 import { HeroReveal } from "../components/common/HeroReveal";
+import { ImageCarousel } from "../components/common/ImageCarousel";
 
 export default function DetailsPage() {
   const navigate = useNavigate();
@@ -41,11 +42,11 @@ export default function DetailsPage() {
           </section>
 
           {/* Story */}
-          <RevealItem amount={0.25} delay={0.8}>
+          <RevealItem amount={0.25} delay={0.6}>
             <section className="px-6">
               <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                 <div className="bg-[#efe7df] rounded-[32px] h-[320px] flex items-center justify-center text-7xl shadow-inner">
-                  📸
+                  <ImageCarousel></ImageCarousel>
                 </div>
 
                 <div>
@@ -75,7 +76,7 @@ export default function DetailsPage() {
             </section>
           </RevealItem>
 
-          <RevealItem amount={0.25}>
+          <RevealItem amount={0.5}>
             {/* Countdown */}
             <section className="px-6 py-16">
               <div className="max-w-5xl mx-auto text-center">
