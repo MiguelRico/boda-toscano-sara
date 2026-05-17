@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import StatusPopup from "../components/common/StatusPopup";
+import PageTransition from "../components/common/PageTransition";
+import { RevealItem } from "../components/common/RevealItem";
 import { useSearchParams } from "react-router-dom";
 
 const MAX_GUESTS = 10;
@@ -409,87 +411,42 @@ export default function ConfirmationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f6f2] px-4 py-10">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-10 text-center">
-          <p className="mb-2 text-sm uppercase tracking-[0.3em] text-[#b8a999]">
-            Sara & Fran
-          </p>
+    <PageTransition>
+      <div>
+        <div className="min-h-screen bg-[#f9f6f2] px-4 py-10">
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-10 text-center">
+              <p className="mb-2 text-sm uppercase tracking-[0.3em] text-[#b8a999]">
+                Sara & Fran
+              </p>
 
-          <h1 className="mb-4 text-4xl font-light text-[#4d4036]">
-            Confirmación de asistencia
-          </h1>
+              <h1 className="mb-4 text-4xl font-light text-[#4d4036]">
+                Confirmación de asistencia
+              </h1>
 
-          <p className="mx-auto max-w-xl text-base leading-relaxed text-[#7a6d63]">
-            Estamos deseando celebrar este día con vosotros. Podéis confirmar
-            vuestra asistencia y gestionar todos los invitados desde este
-            formulario.
-          </p>
-        </div>
-
-        {!mode && !hasGroupId && (
-          <div className="rounded-3xl bg-white p-6 shadow-sm">
-            <div className="mb-8">
-              <h2 className="mb-2 text-2xl font-light text-[#4d4036]">
-                Buscar invitación
-              </h2>
-
-              <p className="text-sm text-[#7a6d63]">
-                Introduce el email asociado a tu invitación para modificarla o
-                revisarla.
+              <p className="mx-auto max-w-xl text-base leading-relaxed text-[#7a6d63]">
+                Estamos deseando celebrar este día con vosotros. Podéis
+                confirmar vuestra asistencia y gestionar todos los invitados
+                desde este formulario.
               </p>
             </div>
 
-            <div className="mb-5">
-              <label className="mb-2 block text-sm text-[#4d4036]">
-                Email de contacto
-              </label>
+            {!mode && !hasGroupId && (
+              <div className="rounded-3xl bg-white p-6 shadow-sm">
+                <div className="mb-8">
+                  <h2 className="mb-2 text-2xl font-light text-[#4d4036]">
+                    Buscar invitación
+                  </h2>
 
-              <input
-                type="email"
-                value={contact.email}
-                onChange={(e) => handleContactChange("email", e.target.value)}
-                className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
-                placeholder="ejemplo@email.com"
-              />
+                  <p className="text-sm text-[#7a6d63]">
+                    Introduce el email asociado a tu invitación para modificarla
+                    o revisarla.
+                  </p>
+                </div>
 
-              {errors.email && (
-                <p className="mt-2 text-sm text-red-500">{errors.email}</p>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <button
-                onClick={handleSearchInvitation}
-                disabled={loadingSearch}
-                className="rounded-2xl bg-[#4d4036] px-6 py-4 text-white transition hover:opacity-90 disabled:opacity-50"
-              >
-                {loadingSearch
-                  ? "Buscando invitación..."
-                  : "Buscar mi invitación"}
-              </button>
-
-              <button
-                onClick={handleCreateNew}
-                className="rounded-2xl border border-[#d7c9bc] bg-white px-6 py-4 text-[#4d4036] transition hover:bg-[#faf5f0]"
-              >
-                Crear nueva confirmación
-              </button>
-            </div>
-          </div>
-        )}
-
-        {mode === "form" && (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="rounded-3xl bg-white p-6 shadow-sm">
-              <h2 className="mb-6 text-2xl font-light text-[#4d4036]">
-                Datos de contacto
-              </h2>
-
-              <div className="grid gap-5 md:grid-cols-2">
-                <div>
+                <div className="mb-5">
                   <label className="mb-2 block text-sm text-[#4d4036]">
-                    Email de contacto *
+                    Email de contacto
                   </label>
 
                   <input
@@ -499,7 +456,7 @@ export default function ConfirmationPage() {
                       handleContactChange("email", e.target.value)
                     }
                     className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
-                    placeholder="Ej: ejemplo@email.com"
+                    placeholder="ejemplo@email.com"
                   />
 
                   {errors.email && (
@@ -507,289 +464,371 @@ export default function ConfirmationPage() {
                   )}
                 </div>
 
-                <div>
-                  <label className="mb-2 block text-sm text-[#4d4036]">
-                    Teléfono de contacto *
-                  </label>
+                <div className="flex flex-col gap-4">
+                  <button
+                    onClick={handleSearchInvitation}
+                    disabled={loadingSearch}
+                    className="rounded-2xl bg-[#4d4036] px-6 py-4 text-white transition hover:opacity-90 disabled:opacity-50"
+                  >
+                    {loadingSearch
+                      ? "Buscando invitación..."
+                      : "Buscar mi invitación"}
+                  </button>
 
-                  <input
-                    type="tel"
-                    value={contact.phone}
-                    onChange={(e) =>
-                      handleContactChange("phone", e.target.value)
-                    }
-                    className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
-                    placeholder="Ej: 600123456"
-                  />
-
-                  {errors.phone && (
-                    <p className="mt-2 text-sm text-red-500">{errors.phone}</p>
-                  )}
+                  <button
+                    onClick={handleCreateNew}
+                    className="rounded-2xl border border-[#d7c9bc] bg-white px-6 py-4 text-[#4d4036] transition hover:bg-[#faf5f0]"
+                  >
+                    Crear nueva confirmación
+                  </button>
                 </div>
               </div>
-            </div>
+            )}
 
-            {guests.map((guest, index) => (
-              <div key={index} className="rounded-3xl bg-white p-6 shadow-sm">
-                <div className="mb-6 flex items-center justify-between">
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.2em] text-[#b8a999]">
-                      Invitado {index + 1}
-                    </p>
+            {mode === "form" && (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="rounded-3xl bg-white p-6 shadow-sm">
+                  <h2 className="mb-6 text-2xl font-light text-[#4d4036]">
+                    Datos de contacto
+                  </h2>
 
-                    <h3 className="text-2xl font-light text-[#4d4036]">
-                      Información del invitado
-                    </h3>
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <div>
+                      <label className="mb-2 block text-sm text-[#4d4036]">
+                        Email de contacto *
+                      </label>
+
+                      <input
+                        type="email"
+                        value={contact.email}
+                        onChange={(e) =>
+                          handleContactChange("email", e.target.value)
+                        }
+                        className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
+                        placeholder="Ej: ejemplo@email.com"
+                      />
+
+                      {errors.email && (
+                        <p className="mt-2 text-sm text-red-500">
+                          {errors.email}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="mb-2 block text-sm text-[#4d4036]">
+                        Teléfono de contacto *
+                      </label>
+
+                      <input
+                        type="tel"
+                        value={contact.phone}
+                        onChange={(e) =>
+                          handleContactChange("phone", e.target.value)
+                        }
+                        className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
+                        placeholder="Ej: 600123456"
+                      />
+
+                      {errors.phone && (
+                        <p className="mt-2 text-sm text-red-500">
+                          {errors.phone}
+                        </p>
+                      )}
+                    </div>
                   </div>
+                </div>
 
-                  {guests.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveGuest(index)}
-                      className="rounded-full bg-[#cd5c5c] hover:bg-[#f08080] transition-colors px-8 py-4 text-white shadow-md text-base transition hover:opacity-70"
+                <RevealItem amount={0.1}>
+                  {guests.map((guest, index) => (
+                    <div
+                      key={index}
+                      className="rounded-3xl bg-white p-6 shadow-sm mb-6"
                     >
-                      Eliminar
-                    </button>
-                  )}
-                </div>
+                      <RevealItem>
+                        <div className="mb-6 flex items-center justify-between">
+                          <div>
+                            <p className="text-sm uppercase tracking-[0.2em] text-[#b8a999]">
+                              Invitado {index + 1}
+                            </p>
 
-                <div className="grid gap-5 md:grid-cols-2">
-                  <div>
-                    <label className="mb-2 block text-sm text-[#4d4036]">
-                      Nombre *
-                    </label>
+                            <h3 className="text-2xl font-light text-[#4d4036]">
+                              Información del invitado
+                            </h3>
+                          </div>
 
-                    <input
-                      type="text"
-                      value={guest.name}
-                      onChange={(e) =>
-                        handleGuestChange(index, "name", e.target.value)
-                      }
-                      className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
-                      placeholder="Ej: Sara"
-                    />
+                          {guests.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveGuest(index)}
+                              className="rounded-full bg-[#cd5c5c] hover:bg-[#f08080] transition-colors px-8 py-4 text-white shadow-md text-base transition hover:opacity-70"
+                            >
+                              Eliminar
+                            </button>
+                          )}
+                        </div>
 
-                    {errors[`guest_name_${index}`] && (
-                      <p className="mt-2 text-sm text-red-500">
-                        {errors[`guest_name_${index}`]}
-                      </p>
-                    )}
-                  </div>
+                        <div className="grid gap-5 md:grid-cols-2">
+                          <div>
+                            <label className="mb-2 block text-sm text-[#4d4036]">
+                              Nombre *
+                            </label>
 
-                  <div>
-                    <label className="mb-2 block text-sm text-[#4d4036]">
-                      Apellidos *
-                    </label>
+                            <input
+                              type="text"
+                              value={guest.name}
+                              onChange={(e) =>
+                                handleGuestChange(index, "name", e.target.value)
+                              }
+                              className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
+                              placeholder="Ej: Sara"
+                            />
 
-                    <input
-                      type="text"
-                      value={guest.lastname}
-                      onChange={(e) =>
-                        handleGuestChange(index, "lastname", e.target.value)
-                      }
-                      className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
-                      placeholder="Ej: García"
-                    />
+                            {errors[`guest_name_${index}`] && (
+                              <p className="mt-2 text-sm text-red-500">
+                                {errors[`guest_name_${index}`]}
+                              </p>
+                            )}
+                          </div>
 
-                    {errors[`guest_lastname_${index}`] && (
-                      <p className="mt-2 text-sm text-red-500">
-                        {errors[`guest_lastname_${index}`]}
-                      </p>
-                    )}
-                  </div>
-                </div>
+                          <div>
+                            <label className="mb-2 block text-sm text-[#4d4036]">
+                              Apellidos *
+                            </label>
 
-                <div className="mt-6">
-                  <label className="mb-3 block text-sm font-medium text-stone-700">
-                    Intolerancias o alergias
-                  </label>
+                            <input
+                              type="text"
+                              value={guest.lastname}
+                              onChange={(e) =>
+                                handleGuestChange(
+                                  index,
+                                  "lastname",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
+                              placeholder="Ej: García"
+                            />
 
-                  <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-                    {commonAllergies.map((allergy) => {
-                      const checked = guest.allergies.includes(allergy);
+                            {errors[`guest_lastname_${index}`] && (
+                              <p className="mt-2 text-sm text-red-500">
+                                {errors[`guest_lastname_${index}`]}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </RevealItem>
 
-                      return (
-                        <label
-                          key={allergy}
-                          className={`flex cursor-pointer items-center gap-2 rounded-2xl border px-4 py-3 text-sm transition ${
-                            checked
-                              ? "border-[#e7ddd4] bg-[#b89d87] hover:bg-[#a88d77] text-white"
-                              : "border-[#e7ddd4]-stone-200 bg-[#fcfaf8]-stone-50 text-stone-600 hover:border-[#b89f87]"
-                          }`}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={() =>
-                              handleGuestChange(index, "allergies", allergy)
+                      <RevealItem>
+                        <div className="mt-6">
+                          <label className="mb-3 block text-sm font-medium text-stone-700">
+                            Intolerancias o alergias
+                          </label>
+
+                          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+                            {commonAllergies.map((allergy) => {
+                              const checked = guest.allergies.includes(allergy);
+
+                              return (
+                                <label
+                                  key={allergy}
+                                  className={`flex cursor-pointer items-center justify-center rounded-2xl border px-4 py-3 text-sm transition ${
+                                    checked
+                                      ? "border-[#e7ddd4] bg-[#b89d87] hover:bg-[#a88d77] text-white"
+                                      : "border-[#e7ddd4] bg-[#fcfaf8] text-stone-600 hover:border-[#b89f87]"
+                                  }`}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    className="hidden"
+                                    checked={checked}
+                                    onChange={() =>
+                                      handleGuestChange(
+                                        index,
+                                        "allergies",
+                                        allergy,
+                                      )
+                                    }
+                                  />
+
+                                  {allergy}
+                                </label>
+                              );
+                            })}
+                          </div>
+
+                          <div className="mt-4">
+                            <textarea
+                              rows={3}
+                              value={guest.otherAllergies}
+                              onChange={(e) =>
+                                handleGuestChange(
+                                  index,
+                                  "otherAllergies",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Otras alergias, intolerancias o comentarios alimentarios"
+                              className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-stone-800 outline-none transition focus:border-[#b89f87] focus:bg-white"
+                            />
+                          </div>
+                        </div>
+                      </RevealItem>
+
+                      <RevealItem>
+                        <div className="mt-5">
+                          <label className="mb-2 block text-sm text-[#4d4036]">
+                            Comentarios adicionales
+                          </label>
+
+                          <textarea
+                            rows={4}
+                            value={guest.comments}
+                            onChange={(e) =>
+                              handleGuestChange(
+                                index,
+                                "comments",
+                                e.target.value,
+                              )
                             }
-                            className="h-4 w-4 rounded border border-[#e7ddd4] bg-white accent-white focus:ring-0"
+                            className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
+                            placeholder="Cualquier indicación que debamos tener en cuenta"
                           />
 
-                          {allergy}
-                        </label>
-                      );
-                    })}
-                  </div>
+                          {errors[`guest_comments_${index}`] && (
+                            <p className="mt-2 text-sm text-red-500">
+                              {errors[`guest_comments_${index}`]}
+                            </p>
+                          )}
+                        </div>
+                      </RevealItem>
 
-                  <div className="mt-4">
-                    <textarea
-                      rows={3}
-                      value={guest.otherAllergies}
-                      onChange={(e) =>
-                        handleGuestChange(
-                          index,
-                          "otherAllergies",
-                          e.target.value,
-                        )
-                      }
-                      placeholder="Otras alergias, intolerancias o comentarios alimentarios"
-                      className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-stone-800 outline-none transition focus:border-[#b89f87] focus:bg-white"
-                    />
-                  </div>
-                </div>
+                      <RevealItem>
+                        <div className="mt-6 rounded-3xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87] p-5">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <h3 className="text-lg font-semibold text-stone-800">
+                                Servicio de autobús
+                              </h3>
 
-                <div className="mt-5">
-                  <label className="mb-2 block text-sm text-[#4d4036]">
-                    Comentarios adicionales
-                  </label>
+                              <p className="mt-1 text-sm leading-6 text-stone-600">
+                                Tendremos autobús para facilitar el
+                                desplazamiento de ida y vuelta.
+                              </p>
+                            </div>
 
-                  <textarea
-                    rows={4}
-                    value={guest.comments}
-                    onChange={(e) =>
-                      handleGuestChange(index, "comments", e.target.value)
-                    }
-                    className="w-full rounded-2xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87]"
-                    placeholder="Cualquier indicación que debamos tener en cuenta"
-                  />
+                            <label className="relative inline-flex cursor-pointer items-center">
+                              <input
+                                type="checkbox"
+                                checked={guest.busNeeded}
+                                onChange={(e) =>
+                                  handleGuestChange(
+                                    index,
+                                    "busNeeded",
+                                    e.target.checked,
+                                  )
+                                }
+                                className="peer sr-only"
+                              />
+                              <div className="peer h-6 w-11 rounded-full bg-stone-300 transition after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#a88d77] peer-checked:after:translate-x-full" />
+                            </label>
+                          </div>
 
-                  {errors[`guest_comments_${index}`] && (
-                    <p className="mt-2 text-sm text-red-500">
-                      {errors[`guest_comments_${index}`]}
-                    </p>
-                  )}
-                </div>
+                          {guest.busNeeded && (
+                            <div className="mt-5 grid gap-4 md:grid-cols-2">
+                              <div>
+                                <label className="mb-2 block text-sm font-medium text-stone-700">
+                                  Horario ida
+                                </label>
 
-                <div className="mt-6 rounded-3xl border border-[#e7ddd4] bg-[#fcfaf8] px-4 py-3 outline-none transition focus:border-[#b89f87] p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-stone-800">
-                        Servicio de autobús
-                      </h3>
+                                <select
+                                  value={guest.outboundBus}
+                                  onChange={(e) =>
+                                    handleGuestChange(
+                                      index,
+                                      "outboundBus",
+                                      e.target.value,
+                                    )
+                                  }
+                                  className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-700 outline-none focus:border-[#b89f87]"
+                                >
+                                  <option value="No">
+                                    No necesito autobus de ida
+                                  </option>
+                                  <option value="18:00">18:00</option>
+                                </select>
+                              </div>
 
-                      <p className="mt-1 text-sm leading-6 text-stone-600">
-                        Tendremos autobús para facilitar el desplazamiento de
-                        ida y vuelta.
-                      </p>
+                              <div>
+                                <label className="mb-2 block text-sm font-medium text-stone-700">
+                                  Horario vuelta
+                                </label>
+
+                                <select
+                                  value={guest.returnBus}
+                                  onChange={(e) =>
+                                    handleGuestChange(
+                                      index,
+                                      "returnBus",
+                                      e.target.value,
+                                    )
+                                  }
+                                  className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-700 outline-none focus:border-[#b89f87]"
+                                >
+                                  <option value="No">
+                                    No necesito autobus de vuelta
+                                  </option>
+                                  <option value="3:00">3:00</option>
+                                  <option value="6:00">6:00</option>
+                                </select>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </RevealItem>
                     </div>
+                  ))}
+                </RevealItem>
 
-                    <label className="relative inline-flex cursor-pointer items-center">
-                      <input
-                        type="checkbox"
-                        checked={guest.busNeeded}
-                        onChange={(e) =>
-                          handleGuestChange(
-                            index,
-                            "busNeeded",
-                            e.target.checked,
-                          )
-                        }
-                        className="peer sr-only"
-                      />
-                      <div className="peer h-6 w-11 rounded-full bg-stone-300 transition after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#a88d77] peer-checked:after:translate-x-full" />
-                    </label>
-                  </div>
-
-                  {guest.busNeeded && (
-                    <div className="mt-5 grid gap-4 md:grid-cols-2">
-                      <div>
-                        <label className="mb-2 block text-sm font-medium text-stone-700">
-                          Horario ida
-                        </label>
-
-                        <select
-                          value={guest.outboundBus}
-                          onChange={(e) =>
-                            handleGuestChange(
-                              index,
-                              "outboundBus",
-                              e.target.value,
-                            )
-                          }
-                          className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-700 outline-none focus:border-[#b89f87]"
-                        >
-                          <option value="No">No necesito autobus de ida</option>
-                          <option value="18:00">18:00</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="mb-2 block text-sm font-medium text-stone-700">
-                          Horario vuelta
-                        </label>
-
-                        <select
-                          value={guest.returnBus}
-                          onChange={(e) =>
-                            handleGuestChange(
-                              index,
-                              "returnBus",
-                              e.target.value,
-                            )
-                          }
-                          className="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-700 outline-none focus:border-[#b89f87]"
-                        >
-                          <option value="No">
-                            No necesito autobus de vuelta
-                          </option>
-                          <option value="3:00">3:00</option>
-                          <option value="6:00">6:00</option>
-                        </select>
-                      </div>
-                    </div>
+                <div className="flex flex-col gap-4">
+                  {totalGuests < MAX_GUESTS && (
+                    <button
+                      type="button"
+                      onClick={handleAddGuest}
+                      className="rounded-2xl border border-dashed border-[#c9b7a7] bg-[#faf5f0] px-6 py-4 text-[#4d4036] transition hover:bg-[#f5ede5]"
+                    >
+                      Añadir invitado
+                    </button>
                   )}
+
+                  <button
+                    type="submit"
+                    disabled={loadingSubmit}
+                    className="rounded-2xl bg-[#4d4036] px-6 py-4 text-white transition hover:opacity-90 disabled:opacity-50"
+                  >
+                    {loadingSubmit
+                      ? "Guardando confirmación..."
+                      : "Confirmar asistencia"}
+                  </button>
                 </div>
-              </div>
-            ))}
+              </form>
+            )}
+          </div>
 
-            <div className="flex flex-col gap-4">
-              {totalGuests < MAX_GUESTS && (
-                <button
-                  type="button"
-                  onClick={handleAddGuest}
-                  className="rounded-2xl border border-dashed border-[#c9b7a7] bg-[#faf5f0] px-6 py-4 text-[#4d4036] transition hover:bg-[#f5ede5]"
-                >
-                  Añadir invitado
-                </button>
-              )}
-
-              <button
-                type="submit"
-                disabled={loadingSubmit}
-                className="rounded-2xl bg-[#4d4036] px-6 py-4 text-white transition hover:opacity-90 disabled:opacity-50"
-              >
-                {loadingSubmit
-                  ? "Guardando confirmación..."
-                  : "Confirmar asistencia"}
-              </button>
-            </div>
-          </form>
-        )}
+          <StatusPopup
+            open={popup.open}
+            type={popup.type}
+            title={popup.title}
+            message={popup.message}
+            onClose={() =>
+              setPopup((prev) => ({
+                ...prev,
+                open: false,
+              }))
+            }
+          />
+        </div>
       </div>
-
-      <StatusPopup
-        open={popup.open}
-        type={popup.type}
-        title={popup.title}
-        message={popup.message}
-        onClose={() =>
-          setPopup((prev) => ({
-            ...prev,
-            open: false,
-          }))
-        }
-      />
-    </div>
+    </PageTransition>
   );
 }
