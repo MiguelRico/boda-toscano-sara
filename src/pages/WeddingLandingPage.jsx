@@ -11,11 +11,11 @@ export default function WeddingLandingPage() {
 
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
           <p className="tracking-[0.35em] uppercase text-sm text-[#a58b75] mb-4">
-            14 de Septiembre de 2026
+            22 de Agosto de 2026
           </p>
 
           <h1 className="text-5xl md:text-7xl font-light leading-tight text-[#6f5b4b]">
-            Sara <span className="mx-2">&</span> Toscano
+            Sara <span className="mx-2">&</span> Fran
           </h1>
 
           <div className="w-24 h-[1px] bg-[#cdb8a3] my-8" />
@@ -46,6 +46,13 @@ export default function WeddingLandingPage() {
         <div className="max-w-5xl mx-auto bg-white rounded-[32px] shadow-xl p-6 md:p-10 border border-[#f0e7df]">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <InfoCard
+              title="Transporte"
+              subtitle="Paradas en Huelva y Corrales"
+              description="Tendremos autobús para facilitar el desplazamiento de ida y vuelta."
+              emoji="🚌"
+            />
+
+            <InfoCard
               title="Ceremonia"
               subtitle="18:00 · Hacienda Los Olivos"
               description="Una ceremonia al aire libre rodeados de naturaleza, música y una puesta de sol inolvidable."
@@ -57,13 +64,6 @@ export default function WeddingLandingPage() {
               subtitle="Cóctel, cena y fiesta"
               description="Habrá barra libre, música en directo y muchas ganas de bailar hasta el amanecer."
               emoji="✨"
-            />
-
-            <InfoCard
-              title="Dress Code"
-              subtitle="Elegante · tonos suaves"
-              description="Nos encantará veros cómodos, elegantes y listos para disfrutar de un día muy especial."
-              emoji="🤍"
             />
           </div>
         </div>

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import StatusPopup from "../components/common/StatusPopup";
 import { useSearchParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 const MAX_GUESTS = 10;
 
@@ -243,7 +242,6 @@ export default function ConfirmationPage() {
 
     return Object.keys(newErrors).length === 0;
   };
-  const navigate = useNavigate();
 
   const handleSearchInvitation = async () => {
     const validationErrors = {};
@@ -415,7 +413,7 @@ export default function ConfirmationPage() {
       <div className="mx-auto max-w-3xl">
         <div className="mb-10 text-center">
           <p className="mb-2 text-sm uppercase tracking-[0.3em] text-[#b8a999]">
-            Sara & Toscano
+            Sara & Fran
           </p>
 
           <h1 className="mb-4 text-4xl font-light text-[#4d4036]">
